@@ -16,6 +16,8 @@
 % set their size in inches at 8.5 by 6.375 per panel. Save figures with
 % figure_print, PNG at 300 dpi, the convention. Call figure_style once at
 % the top of a figure script; the defaults persist for the MATLAB session.
+% Each subplot keeps x and y ticks and labels. figure_print restores them
+% before export; call figure_ticks(gcf) after plotting for an on-screen view.
 %
 %   s = figure_style() ;
 %   figure ; plot(x, y, 'Color', s.blue) ; ylabel('Unit')
@@ -25,6 +27,14 @@ function s = figure_style(fontSize, lineWidth)
 
 if nargin < 1 || isempty(fontSize), fontSize = 24 ; end
 if nargin < 2 || isempty(lineWidth), lineWidth = 3 ; end
+availableFonts = listfonts ;
+if any(strcmp(availableFonts, 'Helvetica'))
+    fontName = 'Helvetica' ;
+elseif any(strcmp(availableFonts, 'Arial'))
+    fontName = 'Arial' ;
+else
+    error('style_figures:MissingFont', 'Install Helvetica or Arial before calling figure_style.') ;
+end
 
 % Set1, ColorBrewer
 hex = {'e41a1c', '377eb8', '4daf4a', '984ea3', 'ff7f00', 'ffff33', 'a65628', 'f781bf', '999999'} ;
@@ -37,6 +47,7 @@ s.red = set1(1, :) ; s.blue = set1(2, :) ; s.green = set1(3, :) ; s.purple = set
 s.yellow = set1(6, :) ; s.brown = set1(7, :) ; s.pink = set1(8, :) ; s.gray = set1(9, :) ; s.black = [0 0 0] ;
 s.width = lineWidth ;
 s.font = fontSize ;
+s.font_name = fontName ;
 
 % Figure: white, 4:3 at 8.5 by 6.375 inches, printed at its screen size
 set(groot, 'defaultFigureColor', 'w') ;
@@ -45,7 +56,7 @@ set(groot, 'defaultFigurePosition', [1, 1, 8.5, 6.375]) ;
 set(groot, 'defaultFigurePaperPositionMode', 'auto') ;
 
 % Axes
-set(groot, 'defaultAxesFontName', 'Helvetica') ;
+set(groot, 'defaultAxesFontName', fontName) ;
 set(groot, 'defaultAxesFontSize', fontSize) ;
 set(groot, 'defaultAxesLabelFontSizeMultiplier', 1) ;
 set(groot, 'defaultAxesTitleFontSizeMultiplier', 1) ;
@@ -59,14 +70,21 @@ set(groot, 'defaultAxesXGrid', 'off') ;
 set(groot, 'defaultAxesTickDirMode', 'manual') ;
 set(groot, 'defaultAxesTickDir', 'out') ;
 set(groot, 'defaultAxesTickLength', [0.005, 0.005]) ;
+set(groot, 'defaultAxesXTickMode', 'auto') ;
+set(groot, 'defaultAxesYTickMode', 'auto') ;
+set(groot, 'defaultAxesXTickLabelMode', 'auto') ;
+set(groot, 'defaultAxesYTickLabelMode', 'auto') ;
 set(groot, 'defaultAxesBox', 'off') ;
 set(groot, 'defaultAxesColorOrder', set1) ;
 
 % Lines, legends and text
 set(groot, 'defaultLineLineWidth', lineWidth) ;
 set(groot, 'defaultLegendBox', 'off') ;
-set(groot, 'defaultLegendFontName', 'Helvetica') ;
+set(groot, 'defaultLegendFontName', fontName) ;
 set(groot, 'defaultLegendFontSize', fontSize) ;
-set(groot, 'defaultTextFontName', 'Helvetica') ;
+set(groot, 'defaultLegendInterpreter', 'tex') ;
+set(groot, 'defaultTextFontName', fontName) ;
 set(groot, 'defaultTextFontSize', fontSize) ;
+set(groot, 'defaultTextInterpreter', 'tex') ;
+set(groot, 'defaultAxesTickLabelInterpreter', 'tex') ;
 end

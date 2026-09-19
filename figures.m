@@ -28,6 +28,7 @@
 close all
 clear
 clc
+rng(0, 'twister') % Reproduce the illustration data.
 
 %% Set the template's defaults
 
@@ -396,7 +397,7 @@ figure_print('figures/higher_lower.png')
 
 % Adjust default properties for scatter plot
 set(groot, 'defaultAxesXGrid', 'on')
-set(groot, 'defaultAxesTickLength', [0 0])
+% Keep tick marks on both axes, including scatter plots.
 
 % Create more data
 nData = 20;

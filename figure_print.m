@@ -6,6 +6,7 @@
 % Prints fig, the current figure by default, to the PNG file at dpi dots
 % per inch, 300 by default, at the figure's screen size in inches, as
 % figure_style sets it. A file name without an extension gets .png.
+% Every visible subplot has x and y ticks and labels restored before export.
 %
 % sheet, [width height] in inches, is for a figure larger than the
 % display: MATLAB clamps a figure to the display it draws on, and a
@@ -34,5 +35,6 @@ if nargin >= 4 && ~isempty(sheet)
     dpi = dpi*sheet(1)/pos(3) ;       % the figure is drawn at the fraction pos(3)/sheet(1) of the sheet
 end
 set(fig, 'PaperPositionMode', 'auto') ;
+figure_ticks(fig) ;
 print(fig, '-dpng', sprintf('-r%d', round(dpi)), file) ;
 end

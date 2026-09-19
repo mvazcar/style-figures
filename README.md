@@ -1,37 +1,116 @@
-# Minimalist MATLAB Template for Scientific Figures
+# Style figures
 
-A fork of [pmichaillat/matlab-figures](https://github.com/pmichaillat/matlab-figures), Pascal Michaillat's MATLAB template for scientific figures, which carefully follows [best practices for data visualization](https://www.edwardtufte.com/tufte/books_vdqi). This fork keeps his design and packages it so that any project can call it, with two changes described below.
+A reusable scientific figure template for MATLAB and Python with Matplotlib. Both versions use Helvetica or Arial, ColorBrewer Set1, outward ticks, horizontal grid lines and a white background. Every visible subplot shows x and y tick marks and tick labels, including panels with shared axes.
 
-## What this fork changes
+The default font size is 24 points and the line width is 3 points. A single panel measures 8.5 by 6.375 inches. Multi-panel Python figures use that size per panel. The default export is PNG at 300 dpi.
 
-The intended change is small and deliberate:
+This repository was previously named `mvazcar/matlab-figures`. It extends [Pascal Michaillat's MATLAB template](https://github.com/pmichaillat/matlab-figures). His design, attribution, original examples and MIT licence are retained.
 
-+ **The template is a function.** `figure_style.m` sets the template's defaults for the MATLAB session in one call: Helvetica, black axes and grid, ticks out and short, horizontal grid only, no box, axes line width 1, titles in normal weight, a white 4:3 figure of 8.5 by 6.375 inches, a 24 point font and lines of width 3. Multi-panel figures keep the font and use 8.5 by 6.375 inches per panel.
-+ **The palette is Set1.** The qualitative palette is [ColorBrewer's Set1](https://colorbrewer2.org/#type=qualitative&scheme=Set1&n=9), red, blue, green, purple, orange, yellow, brown, pink and gray. It is set as the color order, so unstyled lines and bars take the colors in turn, and returned by name: `s = figure_style(); plot(x, y, 'Color', s.blue)`. The paired and sequential palettes of the original are unchanged.
-+ **The output convention is PNG at 300 dpi.** `figure_print.m` saves the current figure, or a given one, at its size in inches: `figure_print('basic.png')`. For a figure larger than the display, which MATLAB clamps a figure to, draw it at a fraction `s` of the sheet with the fonts and lines scaled, `figure_style(24*s, 3*s)`, and pass the sheet in inches, `figure_print(file, fig, 300, sheet)`: it prints at `300/s` dots per inch, the pixels of the sheet at 300 dpi with everything in the proportions drawn.
+## Use in Python
 
-`figures.m`, the original illustration script, uses both and writes its twelve figures to `figures/` as PNG.
+Install into your project's Python environment:
 
-<p>
-  <img src="figures/qualitative.png?v=2" alt="Three qualitatively different time series, in blue, red and green" width="49%">
-  <img src="figures/above_below.png?v=2" alt="A time series with colored areas above and below a target" width="49%">
-</p>
+```sh
+python -m pip install "git+https://github.com/mvazcar/style-figures.git"
+```
 
-## Usage
+Then call the template:
 
-+ Clone the repository, and either add its folder to the MATLAB path or copy `figure_style.m` and `figure_print.m` into your project.
-+ Call `figure_style` once at the top of each figure script, and `figure_print` to save each figure.
-+ Run `figures.m` to reproduce the illustrations in `figures/`, or `publish('figures.m')` to generate an HTML page at `html/figures.html` with the code and its output. Any part of `figures.m` can be used as a starting point.
+```python
+from style_figures import figure_style, subplots, figure_print
 
-## Shoutout
+s = figure_style()
+fig, axes = subplots(1, 2, sharex=True, sharey=True)
 
-All of the design is Pascal Michaillat's: the proportions, the typography, the axes, the grids and the restraint that makes the figures readable. Shoutout to him for the template and for documenting it at [pascalmichaillat.org/d](https://pascalmichaillat.org/d/), where the original figures can be viewed at [pascalmichaillat.org/d.pdf](https://pascalmichaillat.org/d.pdf). This fork only changes the palette and the way the template is called.
+for ax, title in zip(axes, ["Founding age", "IPO age"]):
+    ax.plot([0, 1, 2], [1.2, 1.3, 1.4], color=s.blue)
+    ax.set(title=title, xlabel="Age", ylabel="Average markup")
 
-## Software
+figure_print("comparison.png", fig)
+```
 
-+ The original template was developed using MATLAB R2023B on macOS Sonoma (Apple silicon). This fork was tested with MATLAB R2024b on Windows 11.
-+ Other MATLAB releases and operating systems may require minor adjustments. Please report any issues to help improve compatibility.
+Use `subplots()` in place of `matplotlib.pyplot.subplots()` to show both sets of tick labels immediately. It accepts Matplotlib's layout and sharing arguments. `figure_print()` also restores labels before saving, so it works with figures created through ordinary Matplotlib calls. For an existing on-screen figure, call `figure_ticks(fig)` after plotting and before `plt.show()`.
 
-## License
+Tick locations, custom text labels, percentage or date formatters, limits, data and shared-axis links stay unchanged. Python treats explicitly empty tick locations or formatters as deliberate overrides. Panels hidden with `axis('off')`, colourbars, polar axes and 3D axes are excluded. The template targets ordinary Cartesian scientific plots.
 
-This repository is licensed under the [MIT License](LICENSE.md).
+`figure_style()` changes defaults for subsequently created artists. To limit its scope, call it inside `with matplotlib.rc_context():`. For custom sizes, use `figure_style(font_size=18, line_width=2)` and `subplots(..., figsize=(12, 5))`.
+
+`figure_print('comparison')` adds `.png`. An explicit `.pdf` suffix produces a PDF. Exports use the figure's dimensions in inches; pass `bbox_inches='tight'` only when you want cropping to change those dimensions.
+
+## Use in MATLAB
+
+Clone the repository and add its folder to the MATLAB path:
+
+```matlab
+addpath('C:/path/to/style-figures')
+s = figure_style();
+
+fig = figure;
+tiledlayout(1, 2, 'TileSpacing', 'loose');
+for panel = 1:2
+    ax = nexttile;
+    plot(ax, 0:2, [1.2 1.3 1.4], 'Color', s.blue);
+    xlabel(ax, 'Age'); ylabel(ax, 'Average markup');
+end
+figure_ticks(fig);                  % Both axes visible on screen
+figure_print('comparison.png', fig); % Also restores ticks before export
+```
+
+Keep the folder on your MATLAB path, or copy `figure_style.m`, `figure_ticks.m` and `figure_print.m` together into a project. Call `figure_style()` at the top of each plotting script. The defaults last for the MATLAB session.
+
+`figure_ticks()` visits every visible subplot. It restores empty tick positions and labels to automatic values, while preserving non-empty custom positions and labels. Hidden axes remain hidden. It does not change the plotted data or axis limits.
+
+For figures larger than your display, draw at a fraction of the intended sheet size, scaling fonts and lines by the same fraction:
+
+```matlab
+sheet = [17 12.75]; scale = 0.5;
+figure_style(24*scale, 3*scale);
+fig = figure('Position', [1 1 sheet*scale]);
+% Add your panels here.
+figure_print('panels.png', fig, 300, sheet);
+figure_style();
+```
+
+## Font requirement
+
+Both versions select Helvetica if installed, otherwise Arial. They raise an error if neither is installed. They do not silently substitute another family. The selected name is returned as `s.font_name`.
+
+Install Helvetica or Arial before using the template. Python can register a licensed font file for the current process with `matplotlib.font_manager.fontManager.addfont(path)` before calling `figure_style()`. Python's built-in mathematical text also uses the selected family. External LaTeX rendering has its own fonts and is outside this template's font guarantee; leave `text.usetex` off in Python and do not select MATLAB's `latex` interpreter.
+
+## Examples
+
+The Python and MATLAB examples use the same deterministic curves and a 2-by-2 layout. Every panel has both sets of tick labels.
+
+```sh
+python examples/python_panels.py
+```
+
+```matlab
+run('examples/matlab_panels.m')
+```
+
+![Shared axes in Python with labels on every panel](figures/python_panels.png)
+
+Run `figures.m` to reproduce the 12 original MATLAB illustrations. Their random data now use a fixed seed. The older `figures.pdf` and `figures.key` are retained as historical design references; they are not regenerated by the current examples.
+
+## Development and reproducibility
+
+Python requires version 3.10 or later and Matplotlib 3.8 or later within major version 3. MATLAB checks run on R2024b. CI tests both languages on Windows, where Arial is installed. Use a commit SHA when installing from GitHub to pin a research project's template version.
+
+```sh
+python -m pip install -e ".[dev]"
+python -m pytest -q
+python -m ruff check src tests/python examples/python_panels.py
+python -m build
+```
+
+```matlab
+results = runtests('tests/matlab');
+assertSuccess(results)
+```
+
+The tests render figures and check tick visibility, shared-axis behaviour, preservation of custom labels, exported pixel dimensions, font selection and missing-font errors. Source text matching is not used as evidence that figures work.
+
+## Credits and licence
+
+The original proportions, typography, grids and minimalist design are [Pascal Michaillat's](https://pascalmichaillat.org/d/). This extension adds the Set1 default palette, reusable helpers, ticks on every subplot and the Matplotlib implementation. The repository uses the [MIT licence](LICENSE.md).
