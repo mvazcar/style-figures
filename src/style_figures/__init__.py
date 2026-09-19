@@ -110,6 +110,7 @@ def figure_style(font_size=24, line_width=3):
             "legend.frameon": False,
             "legend.fontsize": font_size,
             "savefig.dpi": 300,
+            "savefig.format": "png",
             "savefig.facecolor": "white",
             "savefig.transparent": False,
             "savefig.bbox": None,
@@ -174,6 +175,8 @@ def subplots(nrows=1, ncols=1, **kwargs):
 def figure_print(file, fig=None, dpi=300, **kwargs):
     """Save a figure after restoring subplot tick labels; default PNG, 300 dpi.
 
+    Generate PNG at 300 dpi only, unless the user explicitly requests another
+    format or resolution. Do not automatically generate companion PDFs.
     A path without a suffix receives .png. Other suffixes, such as .pdf,
     are passed to Matplotlib. Parent folders must already exist. The
     sheet uses the figure's size in inches; bbox_inches='tight' may be

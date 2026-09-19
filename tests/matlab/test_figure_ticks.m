@@ -26,6 +26,21 @@ verifyEqual(testCase, ax.FontName, s.font_name) ;
 verifyEqual(testCase, label.FontName, s.font_name) ;
 end
 
+function testDefaultExportIsOnlyPngAt300Dpi(testCase)
+fig = figure('Visible', 'off', 'Position', [1 1 4 3]) ;
+ax = axes(fig) ; plot(ax, 1:3) ;
+folder = tempname ; mkdir(folder) ;
+output = fullfile(folder, 'default') ;
+cleanup = onCleanup(@() delete([output '.png'])) ; %#ok<NASGU>
+figure_print(output, fig) ;
+info = imfinfo([output '.png']) ;
+verifyEqual(testCase, info.Format, 'png') ;
+verifyEqual(testCase, info.Width, 1200, 'AbsTol', 2) ;
+verifyEqual(testCase, info.Height, 900, 'AbsTol', 2) ;
+files = dir(fullfile(folder, '*.*')) ;
+verifyEqual(testCase, sum(~[files.isdir]), 1) ;
+end
+
 function testLinkedPanelsRestoreLabels(testCase)
 fig = figure('Visible', 'off') ;
 tiledlayout(fig, 2, 2) ;

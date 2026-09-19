@@ -2,7 +2,7 @@
 
 A reusable scientific figure template for MATLAB and Python with Matplotlib. Both versions use Helvetica or Arial, ColorBrewer Set1, outward ticks, horizontal grid lines and a white background. Every visible subplot shows x and y tick marks and tick labels, including panels with shared axes.
 
-The default font size is 24 points and the line width is 3 points. A single panel measures 8.5 by 6.375 inches. Multi-panel Python figures use that size per panel. The default export is PNG at 300 dpi.
+The default font size is 24 points and the line width is 3 points. A single panel measures 8.5 by 6.375 inches. Multi-panel Python figures use that size per panel. Produce PNG at 300 dpi only, unless the user explicitly requests another format or resolution. Do not automatically create companion PDFs or other image formats. This rule applies to both languages and to downstream plotting scripts.
 
 This repository was previously named `mvazcar/matlab-figures`. It extends [Pascal Michaillat's MATLAB template](https://github.com/pmichaillat/matlab-figures). His design, attribution, original examples and MIT licence are retained.
 
@@ -35,7 +35,7 @@ Tick locations, custom text labels, percentage or date formatters, limits, data 
 
 `figure_style()` changes defaults for subsequently created artists. To limit its scope, call it inside `with matplotlib.rc_context():`. For custom sizes, use `figure_style(font_size=18, line_width=2)` and `subplots(..., figsize=(12, 5))`.
 
-`figure_print('comparison')` adds `.png`. An explicit `.pdf` suffix produces a PDF. Exports use the figure's dimensions in inches; pass `bbox_inches='tight'` only when you want cropping to change those dimensions.
+`figure_print('comparison')` adds `.png` and saves at 300 dpi. `figure_style()` also sets ordinary Matplotlib exports to PNG at 300 dpi, overriding inherited export defaults. Use an explicit `.pdf` suffix only when the user requests a PDF. Exports use the figure's dimensions in inches; pass `bbox_inches='tight'` only when you want cropping to change those dimensions.
 
 ## Use in MATLAB
 

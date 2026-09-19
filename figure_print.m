@@ -7,6 +7,8 @@
 % per inch, 300 by default, at the figure's screen size in inches, as
 % figure_style sets it. A file name without an extension gets .png.
 % Every visible subplot has x and y ticks and labels restored before export.
+% Generate PNG at 300 dpi only unless the user explicitly requests another
+% format or resolution. Do not automatically generate companion PDFs.
 %
 % sheet, [width height] in inches, is for a figure larger than the
 % display: MATLAB clamps a figure to the display it draws on, and a

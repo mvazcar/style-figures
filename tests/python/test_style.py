@@ -122,3 +122,18 @@ def test_missing_required_fonts_raise_instead_of_silent_fallback(monkeypatch):
     monkeypatch.setattr(font_manager.fontManager, "ttflist", [])
     with pytest.raises(RuntimeError, match="Helvetica or Arial"):
         figure_style()
+
+
+def test_png_300_defaults_override_inherited_export_settings(tmp_path):
+    matplotlib.rcParams.update({"savefig.format": "pdf", "savefig.dpi": 72})
+    figure_style()
+    fig, ax = subplots(figsize=(4, 3))
+    ax.plot([0, 1], [0, 1])
+    fig.savefig(tmp_path / "ordinary")
+    figure_print(tmp_path / "helper", fig)
+    assert sorted(path.name for path in tmp_path.iterdir()) == ["helper.png", "ordinary.png"]
+    for path in tmp_path.iterdir():
+        with Image.open(path) as image:
+            assert image.format == "PNG"
+            assert image.size == (1200, 900)
+            assert image.info["dpi"][0] == pytest.approx(300, abs=0.1)
