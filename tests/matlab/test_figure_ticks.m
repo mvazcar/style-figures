@@ -26,6 +26,21 @@ verifyEqual(testCase, ax.FontName, s.font_name) ;
 verifyEqual(testCase, label.FontName, s.font_name) ;
 end
 
+function testCompleteColourCycle(testCase)
+s = figure_style() ;
+expected = [55 126 184; 228 26 28; 77 175 74; 152 78 163; 255 127 0; ...
+    255 255 51; 166 86 40; 247 129 191; 153 153 153] / 255 ;
+fig = figure('Visible', 'off') ; ax = axes(fig) ; hold(ax, 'on') ;
+for i = 1:10
+    line = plot(ax, [0 1], [i i+1]) ;
+    verifyEqual(testCase, line.Color, expected(mod(i-1,9)+1,:), 'AbsTol', 1e-12) ;
+end
+names = {'blue','red','green','purple','orange','yellow','brown','pink','gray'} ;
+for i = 1:9
+    verifyEqual(testCase, s.(names{i}), expected(i,:), 'AbsTol', 1e-12) ;
+end
+end
+
 function testDefaultExportIsOnlyPngAt300Dpi(testCase)
 fig = figure('Visible', 'off', 'Position', [1 1 4 3]) ;
 ax = axes(fig) ; plot(ax, 1:3) ;

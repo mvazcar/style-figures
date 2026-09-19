@@ -8,6 +8,8 @@ This repository was previously named `mvazcar/matlab-figures`. It extends [Pasca
 
 ## Use in Python
 
+The automatic colour order in both languages is blue, red, green, purple, orange, yellow, brown, pink and grey. All nine colours are from ColorBrewer Set1. The cycle restarts at blue after the ninth series. Named colours such as `s.blue` and `s.red` keep their meanings.
+
 Install into your project's Python environment:
 
 ```sh

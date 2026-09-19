@@ -87,8 +87,8 @@ def test_style_colours_and_export_defaults(tmp_path):
     fig, ax = subplots(figsize=(4, 3))
     (first,) = ax.plot([0, 1], [1, 2])
     (second,) = ax.plot([0, 1], [2, 3])
-    assert first.get_color() == style.red == "#e41a1c"
-    assert second.get_color() == style.blue == "#377eb8"
+    assert first.get_color() == style.blue == "#377eb8"
+    assert second.get_color() == style.red == "#e41a1c"
     assert first.get_linewidth() == 3
     assert ax.get_xticklabels()[0].get_fontsize() == 24
     assert style.font_name in ("Helvetica", "Arial")
@@ -137,3 +137,23 @@ def test_png_300_defaults_override_inherited_export_settings(tmp_path):
             assert image.format == "PNG"
             assert image.size == (1200, 900)
             assert image.info["dpi"][0] == pytest.approx(300, abs=0.1)
+
+
+def test_complete_colour_cycle_and_named_colours():
+    style = figure_style()
+    expected = [
+        "#377eb8",
+        "#e41a1c",
+        "#4daf4a",
+        "#984ea3",
+        "#ff7f00",
+        "#ffff33",
+        "#a65628",
+        "#f781bf",
+        "#999999",
+    ]
+    names = ["blue", "red", "green", "purple", "orange", "yellow", "brown", "pink", "gray"]
+    fig, ax = subplots()
+    lines = [ax.plot([0, 1], [i, i + 1])[0] for i in range(10)]
+    assert [line.get_color() for line in lines] == expected + expected[:1]
+    assert [getattr(style, name) for name in names] == expected

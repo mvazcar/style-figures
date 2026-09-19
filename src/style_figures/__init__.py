@@ -16,8 +16,8 @@ from matplotlib import font_manager
 __all__ = ["figure_print", "figure_style", "figure_ticks", "subplots"]
 
 _SET1 = (
-    "#e41a1c",
     "#377eb8",
+    "#e41a1c",
     "#4daf4a",
     "#984ea3",
     "#ff7f00",
@@ -26,7 +26,7 @@ _SET1 = (
     "#f781bf",
     "#999999",
 )
-_NAMES = ("red", "blue", "green", "purple", "orange", "yellow", "brown", "pink", "gray")
+_NAMES = ("blue", "red", "green", "purple", "orange", "yellow", "brown", "pink", "gray")
 
 
 def _positive(value, name):

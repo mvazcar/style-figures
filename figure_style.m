@@ -7,8 +7,8 @@
 % Tufte: Helvetica, black axes and grid, ticks out and short, horizontal
 % grid only, no box, axes line width 1, title in normal weight, labels
 % and title in the axes font size, white figures 8.5 by 6.375 inches
-% printed at their screen size. The palette is ColorBrewer's Set1: red,
-% blue, green, purple, orange, yellow, brown, pink and gray, set as the
+% printed at their screen size. The palette is ColorBrewer's Set1: blue,
+% red, green, purple, orange, yellow, brown, pink and gray, set as the
 % color order so that unstyled lines and bars take them in turn, and
 % returned by name in s, with the line width and font size in s.width and
 % s.font. The single figure of the template uses a 24 point font and
@@ -37,13 +37,13 @@ else
 end
 
 % Set1, ColorBrewer
-hex = {'e41a1c', '377eb8', '4daf4a', '984ea3', 'ff7f00', 'ffff33', 'a65628', 'f781bf', '999999'} ;
+hex = {'377eb8', 'e41a1c', '4daf4a', '984ea3', 'ff7f00', 'ffff33', 'a65628', 'f781bf', '999999'} ;
 set1 = zeros(9, 3) ;
 for i = 1:9
     set1(i, :) = transpose(sscanf(hex{i}, '%2x%2x%2x'))/255 ;
 end
 s.set1 = set1 ;
-s.red = set1(1, :) ; s.blue = set1(2, :) ; s.green = set1(3, :) ; s.purple = set1(4, :) ; s.orange = set1(5, :) ;
+s.blue = set1(1, :) ; s.red = set1(2, :) ; s.green = set1(3, :) ; s.purple = set1(4, :) ; s.orange = set1(5, :) ;
 s.yellow = set1(6, :) ; s.brown = set1(7, :) ; s.pink = set1(8, :) ; s.gray = set1(9, :) ; s.black = [0 0 0] ;
 s.width = lineWidth ;
 s.font = fontSize ;
