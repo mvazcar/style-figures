@@ -157,3 +157,23 @@ def test_complete_colour_cycle_and_named_colours():
     lines = [ax.plot([0, 1], [i, i + 1])[0] for i in range(10)]
     assert [line.get_color() for line in lines] == expected + expected[:1]
     assert [getattr(style, name) for name in names] == expected
+
+
+def test_classic_matlab_colour_order():
+    style = figure_style(palette="matlab")
+    expected = [
+        "#0072BD", "#D95319", "#EDB120", "#7E2F8E",
+        "#77AC30", "#4DBEEE", "#A2142F",
+    ]
+    fig, ax = subplots()
+    lines = [ax.plot([0, 1], [i, i + 1])[0] for i in range(8)]
+    assert [line.get_color() for line in lines] == expected + expected[:1]
+    assert style.blue == expected[0]
+    assert style.orange == expected[1]
+    assert style.red == expected[6]
+    assert style.matlab == tuple(expected)
+
+
+def test_reject_unknown_palette():
+    with pytest.raises(ValueError, match="palette"):
+        figure_style(palette="unknown")

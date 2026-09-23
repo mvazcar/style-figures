@@ -26,7 +26,17 @@ _SET1 = (
     "#f781bf",
     "#999999",
 )
-_NAMES = ("blue", "red", "green", "purple", "orange", "yellow", "brown", "pink", "gray")
+_SET1_NAMES = ("blue", "red", "green", "purple", "orange", "yellow", "brown", "pink", "gray")
+_MATLAB = (
+    "#0072BD",
+    "#D95319",
+    "#EDB120",
+    "#7E2F8E",
+    "#77AC30",
+    "#4DBEEE",
+    "#A2142F",
+)
+_MATLAB_NAMES = ("blue", "orange", "yellow", "purple", "green", "cyan", "red")
 
 
 def _positive(value, name):
@@ -36,15 +46,19 @@ def _positive(value, name):
     return value
 
 
-def figure_style(font_size=24, line_width=3):
-    """Set session defaults and return named Set1 colours, font and line width.
+def figure_style(font_size=24, line_width=3, palette="set1"):
+    """Set session defaults and return named colours, font and line width.
 
     Use Helvetica when installed, otherwise Arial; fail if neither is present.
     Existing artists retain their styling. Use matplotlib.rc_context() to
-    limit the defaults to a block of code.
+    limit the defaults to a block of code. Select ``palette="matlab"`` for
+    MATLAB's seven-colour ColorOrder from R2014b-R2024b.
     """
     font_size = _positive(font_size, "font_size")
     line_width = _positive(line_width, "line_width")
+    if palette not in ("set1", "matlab"):
+        raise ValueError("palette must be 'set1' or 'matlab'")
+    colours = _SET1 if palette == "set1" else _MATLAB
     available = {font.name for font in font_manager.fontManager.ttflist}
     font_name = next((name for name in ("Helvetica", "Arial") if name in available), None)
     if font_name is None:
@@ -84,7 +98,7 @@ def figure_style(font_size=24, line_width=3):
             "axes.grid.axis": "y",
             "axes.grid.which": "major",
             "axes.axisbelow": True,
-            "axes.prop_cycle": cycler(color=_SET1),
+            "axes.prop_cycle": cycler(color=colours),
             "grid.color": "black",
             "grid.alpha": 0.15,
             "grid.linestyle": "-",
@@ -118,10 +132,16 @@ def figure_style(font_size=24, line_width=3):
             "ps.fonttype": 42,
         }
     )
+    named = dict(zip(_SET1_NAMES, _SET1))
+    named["cyan"] = _MATLAB[5]
+    if palette == "matlab":
+        named.update(zip(_MATLAB_NAMES, _MATLAB))
     return SimpleNamespace(
-        **dict(zip(_NAMES, _SET1)),
+        **named,
         black="#000000",
         set1=_SET1,
+        matlab=_MATLAB,
+        palette=palette,
         font=font_size,
         width=line_width,
         font_name=font_name,

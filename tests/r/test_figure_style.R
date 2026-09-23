@@ -8,6 +8,18 @@ stopifnot(
   s$font_name %in% c("Helvetica", "Arial")
 )
 
+m <- figure_style(palette = "matlab")
+stopifnot(
+  identical(m$matlab,
+            c("#0072BD", "#D95319", "#EDB120", "#7E2F8E",
+              "#77AC30", "#4DBEEE", "#A2142F")),
+  identical(m$blue, "#0072BD"),
+  identical(m$orange, "#D95319"),
+  identical(m$red, "#A2142F"),
+  identical(scale_colour_style_figures(palette = "matlab")$palette(2),
+            m$matlab)
+)
+
 d <- expand.grid(x = 1:3, panel = c("A", "B"))
 d$y <- d$x + as.integer(d$panel == "B")
 p <- ggplot2::ggplot(d, ggplot2::aes(x, y)) +
