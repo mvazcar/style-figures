@@ -1,6 +1,6 @@
 # Style figures
 
-A reusable scientific figure template for MATLAB, Python with Matplotlib, and R with ggplot2. All three versions use Helvetica or Arial, ColorBrewer Set1 by default, outward ticks, horizontal grid lines and a white background. Every visible subplot shows x and y tick marks and tick labels, including panels with shared axes. An optional palette reproduces MATLAB's classic seven-color order.
+A reusable scientific figure template for MATLAB, Python with Matplotlib, and R with ggplot2. All three versions use Helvetica or Arial, MATLAB's classic seven-color order by default, outward ticks, horizontal grid lines and a white background. Every visible subplot shows x and y tick marks and tick labels, including panels with shared axes. ColorBrewer Set1 remains available as an option.
 
 The default font size is 24 points and the line width is 3 points. A single panel measures 8.5 by 6.375 inches. Multi-panel Python figures use that size per panel. Produce PNG at 300 dpi only, unless the user explicitly requests another format or resolution. Do not automatically create companion PDFs or other image formats. This rule applies to all three languages and to downstream plotting scripts.
 
@@ -8,9 +8,9 @@ This repository was previously named `mvazcar/matlab-figures`. It extends [Pasca
 
 ## Use in Python
 
-The default automatic colour order in all three languages is blue, red, green, purple, orange, yellow, brown, pink and grey. All nine colours are from ColorBrewer Set1. The cycle restarts at blue after the ninth series. Named colours such as `s.blue` and `s.red` keep their meanings.
+The default automatic colour order in all three languages is MATLAB's classic ColorOrder: blue `#0072BD`, orange `#D95319`, yellow `#EDB120`, purple `#7E2F8E`, green `#77AC30`, cyan `#4DBEEE`, and dark red `#A2142F`. The cycle repeats after seven series. MATLAB's [light-theme default changed slightly in R2025a](https://www.mathworks.com/help/matlab/ref/orderedcolors.html); this template uses the earlier palette for consistent replication figures.
 
-For the classic MATLAB ColorOrder used from R2014b through R2024b, select `palette="matlab"` in Python or R, or pass `'matlab'` as the third MATLAB argument. The seven colours, in order, are blue `#0072BD`, orange `#D95319`, yellow `#EDB120`, purple `#7E2F8E`, green `#77AC30`, cyan `#4DBEEE`, and dark red `#A2142F`. The cycle repeats after seven series. MATLAB's [light-theme default changed slightly in R2025a](https://www.mathworks.com/help/matlab/ref/orderedcolors.html); this option deliberately reproduces the earlier palette for older replication code.
+To use the previous nine-colour ColorBrewer Set1 cycle, select `palette="set1"` in Python or R, or pass `'set1'` as the third MATLAB argument. Named colours such as `s.blue` and `s.red` follow the selected palette.
 
 Install into your project's Python environment:
 
@@ -37,7 +37,7 @@ Use `subplots()` in place of `matplotlib.pyplot.subplots()` to show both sets of
 
 Tick locations, custom text labels, percentage or date formatters, limits, data and shared-axis links stay unchanged. Python treats explicitly empty tick locations or formatters as deliberate overrides. Panels hidden with `axis('off')`, colourbars, polar axes and 3D axes are excluded. The template targets ordinary Cartesian scientific plots.
 
-`figure_style()` changes defaults for subsequently created artists. To limit its scope, call it inside `with matplotlib.rc_context():`. For custom sizes, use `figure_style(font_size=18, line_width=2)` and `subplots(..., figsize=(12, 5))`. Use `figure_style(palette="matlab")` to switch colour order.
+`figure_style()` changes defaults for subsequently created artists. To limit its scope, call it inside `with matplotlib.rc_context():`. For custom sizes, use `figure_style(font_size=18, line_width=2)` and `subplots(..., figsize=(12, 5))`. Use `figure_style(palette="set1")` for the earlier template colours.
 
 `figure_print('comparison')` adds `.png` and saves at 300 dpi. `figure_style()` also sets ordinary Matplotlib exports to PNG at 300 dpi, overriding inherited export defaults. Use an explicit `.pdf` suffix only when the user requests a PDF. Exports use the figure's dimensions in inches; pass `bbox_inches='tight'` only when you want cropping to change those dimensions.
 
@@ -61,7 +61,7 @@ figure_print('comparison.png', fig); % Also restores ticks before export
 ```
 
 Keep the folder on your MATLAB path, or copy `figure_style.m`, `figure_ticks.m` and `figure_print.m` together into a project. Call `figure_style()` at the top of each plotting script. The defaults last for the MATLAB session.
-To use the classic MATLAB colour order, call `figure_style(24, 3, 'matlab')`.
+To use Set1 instead, call `figure_style(24, 3, 'set1')`.
 
 `figure_ticks()` visits every visible subplot. It restores empty tick positions and labels to automatic values, while preserving non-empty custom positions and labels. Hidden axes remain hidden. It does not change the plotted data or axis limits.
 
@@ -91,7 +91,7 @@ p <- ggplot2::ggplot(data.frame(x = 1:4, y = c(2, 3, 2.5, 4)),
 figure_print(p, "example.png")
 ```
 
-`figure_style()` returns named colours, font and line-width settings. The `width` value is in points; use `width_mm` for ggplot2's line-width argument. Use `scale_colour_style_figures()` or `scale_fill_style_figures()` for multiple series. Pass `palette = "matlab"` to these helpers, `figure_style()`, and `theme_style_figures()` to use the seven-colour order. For facets, use `facet_wrap_style_figures()` or `facet_grid_style_figures()` so every panel has bottom and left tick labels. The wrappers require ggplot2 3.5 or newer. Adjust font and line width for a different sheet size with `theme_style_figures(font_size = 18, line_width = 2)` and matching `figure_style(18, 2)`. `figure_print()` saves one 8.5 by 6.375 inch PNG at 300 dpi by default; pass `width` and `height` for a slide-sized plot.
+`figure_style()` returns named colours, font and line-width settings. The `width` value is in points; use `width_mm` for ggplot2's line-width argument. Use `scale_colour_style_figures()` or `scale_fill_style_figures()` for multiple series. Pass `palette = "set1"` to these helpers, `figure_style()`, and `theme_style_figures()` to use the earlier nine-colour order. For facets, use `facet_wrap_style_figures()` or `facet_grid_style_figures()` so every panel has bottom and left tick labels. The wrappers require ggplot2 3.5 or newer. Adjust font and line width for a different sheet size with `theme_style_figures(font_size = 18, line_width = 2)` and matching `figure_style(18, 2)`. `figure_print()` saves one 8.5 by 6.375 inch PNG at 300 dpi by default; pass `width` and `height` for a slide-sized plot.
 
 ## Font requirement
 
@@ -145,4 +145,4 @@ The tests render figures and check tick visibility, shared-axis behaviour, prese
 
 ## Credits and licence
 
-The original proportions, typography, grids and minimalist design are [Pascal Michaillat's](https://pascalmichaillat.org/d/). This extension adds the Set1 default palette, reusable helpers, ticks on every subplot, and the Matplotlib and ggplot2 implementations. The repository uses the [MIT licence](LICENSE.md).
+The original proportions, typography, grids and minimalist design are [Pascal Michaillat's](https://pascalmichaillat.org/d/). This extension adds a selectable Set1 palette, reusable helpers, ticks on every subplot, and the Matplotlib and ggplot2 implementations. The repository uses the [MIT licence](LICENSE.md).

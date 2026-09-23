@@ -87,8 +87,8 @@ def test_style_colours_and_export_defaults(tmp_path):
     fig, ax = subplots(figsize=(4, 3))
     (first,) = ax.plot([0, 1], [1, 2])
     (second,) = ax.plot([0, 1], [2, 3])
-    assert first.get_color() == style.blue == "#377eb8"
-    assert second.get_color() == style.red == "#e41a1c"
+    assert first.get_color() == style.blue == "#0072BD"
+    assert second.get_color() == style.orange == "#D95319"
     assert first.get_linewidth() == 3
     assert ax.get_xticklabels()[0].get_fontsize() == 24
     assert style.font_name in ("Helvetica", "Arial")
@@ -142,36 +142,29 @@ def test_png_300_defaults_override_inherited_export_settings(tmp_path):
 def test_complete_colour_cycle_and_named_colours():
     style = figure_style()
     expected = [
-        "#377eb8",
-        "#e41a1c",
-        "#4daf4a",
-        "#984ea3",
-        "#ff7f00",
-        "#ffff33",
-        "#a65628",
-        "#f781bf",
-        "#999999",
-    ]
-    names = ["blue", "red", "green", "purple", "orange", "yellow", "brown", "pink", "gray"]
-    fig, ax = subplots()
-    lines = [ax.plot([0, 1], [i, i + 1])[0] for i in range(10)]
-    assert [line.get_color() for line in lines] == expected + expected[:1]
-    assert [getattr(style, name) for name in names] == expected
-
-
-def test_classic_matlab_colour_order():
-    style = figure_style(palette="matlab")
-    expected = [
         "#0072BD", "#D95319", "#EDB120", "#7E2F8E",
         "#77AC30", "#4DBEEE", "#A2142F",
     ]
+    names = ["blue", "orange", "yellow", "purple", "green", "cyan", "red"]
     fig, ax = subplots()
     lines = [ax.plot([0, 1], [i, i + 1])[0] for i in range(8)]
     assert [line.get_color() for line in lines] == expected + expected[:1]
-    assert style.blue == expected[0]
-    assert style.orange == expected[1]
-    assert style.red == expected[6]
+    assert [getattr(style, name) for name in names] == expected
     assert style.matlab == tuple(expected)
+
+
+def test_set1_colour_order_remains_available():
+    style = figure_style(palette="set1")
+    expected = [
+        "#377eb8", "#e41a1c", "#4daf4a", "#984ea3", "#ff7f00",
+        "#ffff33", "#a65628", "#f781bf", "#999999",
+    ]
+    fig, ax = subplots()
+    lines = [ax.plot([0, 1], [i, i + 1])[0] for i in range(10)]
+    assert [line.get_color() for line in lines] == expected + expected[:1]
+    assert style.blue == expected[0]
+    assert style.red == expected[1]
+    assert style.set1 == tuple(expected)
 
 
 def test_reject_unknown_palette():

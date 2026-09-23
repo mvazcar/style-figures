@@ -28,21 +28,6 @@ end
 
 function testCompleteColourCycle(testCase)
 s = figure_style() ;
-expected = [55 126 184; 228 26 28; 77 175 74; 152 78 163; 255 127 0; ...
-    255 255 51; 166 86 40; 247 129 191; 153 153 153] / 255 ;
-fig = figure('Visible', 'off') ; ax = axes(fig) ; hold(ax, 'on') ;
-for i = 1:10
-    line = plot(ax, [0 1], [i i+1]) ;
-    verifyEqual(testCase, line.Color, expected(mod(i-1,9)+1,:), 'AbsTol', 1e-12) ;
-end
-names = {'blue','red','green','purple','orange','yellow','brown','pink','gray'} ;
-for i = 1:9
-    verifyEqual(testCase, s.(names{i}), expected(i,:), 'AbsTol', 1e-12) ;
-end
-end
-
-function testClassicMatlabColourCycle(testCase)
-s = figure_style(24, 3, 'matlab') ;
 expected = [0 0.4470 0.7410; 0.8500 0.3250 0.0980; ...
     0.9290 0.6940 0.1250; 0.4940 0.1840 0.5560; ...
     0.4660 0.6740 0.1880; 0.3010 0.7450 0.9330; ...
@@ -52,8 +37,23 @@ for i = 1:8
     line = plot(ax, [0 1], [i i+1]) ;
     verifyEqual(testCase, line.Color, expected(mod(i-1,7)+1,:), 'AbsTol', 1e-12) ;
 end
-verifyEqual(testCase, s.matlab, expected, 'AbsTol', 1e-12) ;
-verifyEqual(testCase, s.orange, expected(2,:), 'AbsTol', 1e-12) ;
+names = {'blue','orange','yellow','purple','green','cyan','red'} ;
+for i = 1:7
+    verifyEqual(testCase, s.(names{i}), expected(i,:), 'AbsTol', 1e-12) ;
+end
+end
+
+function testSet1ColourCycleRemainsAvailable(testCase)
+s = figure_style(24, 3, 'set1') ;
+expected = [55 126 184; 228 26 28; 77 175 74; 152 78 163; 255 127 0; ...
+    255 255 51; 166 86 40; 247 129 191; 153 153 153] / 255 ;
+fig = figure('Visible', 'off') ; ax = axes(fig) ; hold(ax, 'on') ;
+for i = 1:10
+    line = plot(ax, [0 1], [i i+1]) ;
+    verifyEqual(testCase, line.Color, expected(mod(i-1,9)+1,:), 'AbsTol', 1e-12) ;
+end
+verifyEqual(testCase, s.set1, expected, 'AbsTol', 1e-12) ;
+verifyEqual(testCase, s.red, expected(2,:), 'AbsTol', 1e-12) ;
 end
 
 function testDefaultExportIsOnlyPngAt300Dpi(testCase)

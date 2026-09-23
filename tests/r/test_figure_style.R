@@ -2,22 +2,21 @@ source(file.path("R", "figure_style.R"))
 
 s <- figure_style()
 stopifnot(
-  identical(s$blue, "#377eb8"),
-  identical(s$red, "#e41a1c"),
-  identical(length(s$set1), 9L),
+  identical(s$blue, "#0072BD"),
+  identical(s$orange, "#D95319"),
+  identical(s$red, "#A2142F"),
+  identical(length(s$matlab), 7L),
+  identical(scale_colour_style_figures()$palette(2), s$matlab),
   s$font_name %in% c("Helvetica", "Arial")
 )
 
-m <- figure_style(palette = "matlab")
+m <- figure_style(palette = "set1")
 stopifnot(
-  identical(m$matlab,
-            c("#0072BD", "#D95319", "#EDB120", "#7E2F8E",
-              "#77AC30", "#4DBEEE", "#A2142F")),
-  identical(m$blue, "#0072BD"),
-  identical(m$orange, "#D95319"),
-  identical(m$red, "#A2142F"),
-  identical(scale_colour_style_figures(palette = "matlab")$palette(2),
-            m$matlab)
+  identical(m$blue, "#377eb8"),
+  identical(m$red, "#e41a1c"),
+  identical(length(m$set1), 9L),
+  identical(scale_colour_style_figures(palette = "set1")$palette(2),
+            m$set1)
 )
 
 d <- expand.grid(x = 1:3, panel = c("A", "B"))

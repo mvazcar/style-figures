@@ -46,13 +46,14 @@ def _positive(value, name):
     return value
 
 
-def figure_style(font_size=24, line_width=3, palette="set1"):
+def figure_style(font_size=24, line_width=3, palette="matlab"):
     """Set session defaults and return named colours, font and line width.
 
     Use Helvetica when installed, otherwise Arial; fail if neither is present.
     Existing artists retain their styling. Use matplotlib.rc_context() to
-    limit the defaults to a block of code. Select ``palette="matlab"`` for
-    MATLAB's seven-colour ColorOrder from R2014b-R2024b.
+    limit the defaults to a block of code. The default palette is MATLAB's
+    seven-colour ColorOrder from R2014b-R2024b. Select ``palette="set1"``
+    for the previous nine-colour cycle.
     """
     font_size = _positive(font_size, "font_size")
     line_width = _positive(line_width, "line_width")

@@ -1,5 +1,5 @@
 # ggplot2 adaptation of the style-figures MATLAB and Matplotlib template.
-# palette = "matlab" selects MATLAB's R2014b-R2024b seven-colour ColorOrder.
+# MATLAB's R2014b-R2024b seven-colour ColorOrder is the default.
 
 .style_figures_set1 <- c(
   blue = "#377eb8", red = "#e41a1c", green = "#4daf4a",
@@ -44,7 +44,7 @@
 }
 
 # Return the named palette and the settings used by the other implementations.
-figure_style <- function(font_size = 24, line_width = 3, palette = "set1") {
+figure_style <- function(font_size = 24, line_width = 3, palette = "matlab") {
   .style_figures_positive(font_size, "font_size")
   .style_figures_positive(line_width, "line_width")
   palette <- match.arg(palette, c("set1", "matlab"))
@@ -65,7 +65,7 @@ figure_style <- function(font_size = 24, line_width = 3, palette = "set1") {
 
 # White 4:3 scientific figures; each visible panel keeps bottom and left axes.
 theme_style_figures <- function(font_size = 24, line_width = 3,
-                                palette = "set1") {
+                                palette = "matlab") {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Install the ggplot2 package to use theme_style_figures().", call. = FALSE)
   }
@@ -95,12 +95,12 @@ theme_style_figures <- function(font_size = 24, line_width = 3,
   )
 }
 
-scale_colour_style_figures <- function(..., palette = "set1") {
+scale_colour_style_figures <- function(..., palette = "matlab") {
   ggplot2::scale_colour_manual(
     values = unname(.style_figures_colors(palette)), ...)
 }
 
-scale_fill_style_figures <- function(..., palette = "set1") {
+scale_fill_style_figures <- function(..., palette = "matlab") {
   ggplot2::scale_fill_manual(
     values = unname(.style_figures_colors(palette)), ...)
 }

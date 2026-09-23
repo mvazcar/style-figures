@@ -1,5 +1,5 @@
 % =========================================================================
-% figure_style: the figure template, with Set1 or classic MATLAB colours
+% figure_style: the figure template, with classic MATLAB colours by default
 %
 %   s = figure_style(fontSize, lineWidth, palette)
 %
@@ -7,8 +7,8 @@
 % Tufte: Helvetica, black axes and grid, ticks out and short, horizontal
 % grid only, no box, axes line width 1, title in normal weight, labels
 % and title in the axes font size, white figures 8.5 by 6.375 inches
-% printed at their screen size. Set1 remains the default palette. Pass
-% 'matlab' as the third argument for MATLAB's R2014b-R2024b ColorOrder.
+% printed at their screen size. MATLAB's R2014b-R2024b ColorOrder is the
+% default palette. Pass 'set1' as the third argument for ColorBrewer Set1.
 % Colours are returned by name in s, with line width and font size in s.width and
 % s.font. The single figure of the template uses a 24 point font and
 % lines of width 3, the defaults; multi-panel figures keep the font and
@@ -26,7 +26,7 @@ function s = figure_style(fontSize, lineWidth, palette)
 
 if nargin < 1 || isempty(fontSize), fontSize = 24 ; end
 if nargin < 2 || isempty(lineWidth), lineWidth = 3 ; end
-if nargin < 3 || isempty(palette), palette = 'set1' ; end
+if nargin < 3 || isempty(palette), palette = 'matlab' ; end
 palette = validatestring(palette, {'set1', 'matlab'}) ;
 availableFonts = listfonts ;
 if any(strcmp(availableFonts, 'Helvetica'))

@@ -5,7 +5,7 @@
 %% Description
 %
 % This script produces a collection of scientific figures that carefully follow data visualization best practices,
-% with the defaults of figure_style.m, the Set1 palette, and the convention of figure_print.m: PNG at 300 dpi, in figures/.
+% with the defaults of figure_style.m, the classic MATLAB palette, and the convention of figure_print.m: PNG at 300 dpi, in figures/.
 %
 %% Output
 %
@@ -32,12 +32,12 @@ rng(0, 'twister') % Reproduce the illustration data.
 
 %% Set the template's defaults
 
-% Helvetica, black axes, ticks out, horizontal grid, no box, 8.5 by 6.375 inches, and the Set1 palette as the color order
+% Helvetica, black axes, ticks out, horizontal grid, no box, 8.5 by 6.375 inches, and the classic MATLAB color order
 s = figure_style();
 
 %% Predefine qualitative color palettes
 
-% Set1 colors, from figure_style
+% Named colors from figure_style; brown, pink, and gray remain optional accents
 
 redColor = s.red;
 blueColor = s.blue;
